@@ -18,7 +18,9 @@ class App extends Component {
     this.state = {
       mode: "hard",
       colorToGuess: colors[0],
-      colors: colors.sort(() =>  .5 - Math.random())
+      colors: colors.sort(() =>  .5 - Math.random()),
+      gameWon: false,
+      wrongGuesses: [false, false, false, false, false, false]
     }
   }
 
@@ -26,21 +28,28 @@ class App extends Component {
     return Math.floor(Math.random() * (255 + 1));
   }
 
-  check(color) {
-    console.log(color.r, color.g, color.b);
+  check(n) {
+    if (this.state.colors[n] === this.state.colorToGuess) {
+      this.setState({gameWon: true});
+    }
+    else {
+      const guesses = this.state.wrongGuesses;
+      guesses[n] = true;
+      this.setState({wrongGuesses: guesses});
+    }
   }
 
   render() {
     return (
       <AppBody>
-        <HeaderContainer>
+        <HeaderContainer gameWon={this.state.gameWon} colour={this.state.colorToGuess}>
           <div>THE GREAT </div>
           <ColorCode> RGB({this.state.colorToGuess.r}, {this.state.colorToGuess.g}, {this.state.colorToGuess.b}) </ColorCode>
           <div>GUESSING GAME</div>
         </HeaderContainer>
 
         <MenuContainer>
-          <MenuButton>NEW COLORS</MenuButton>
+          <MenuButton onClick={() => window.location.reload()}>NEW COLORS</MenuButton>
           <ModeButtons>
             <MenuButton>EASY</MenuButton>
             <MenuButton>HARD</MenuButton>
@@ -49,12 +58,12 @@ class App extends Component {
 
         <ColorsContainer>
           <ColorOptions>
-            <ColorOption color={this.state.colors[0]} onClick={() => this.check(this.state.colors[0])}/>
-            <ColorOption color={this.state.colors[1]} onClick={() => this.check(this.state.colors[1])}/>
-            <ColorOption color={this.state.colors[2]} onClick={() => this.check(this.state.colors[2])}/>
-            <ColorOption color={this.state.colors[3]} onClick={() => this.check(this.state.colors[3])}/>
-            <ColorOption color={this.state.colors[4]} onClick={() => this.check(this.state.colors[4])}/>
-            <ColorOption color={this.state.colors[5]} onClick={() => this.check(this.state.colors[5])}/>
+            <ColorOption color={this.state.colors[0]} onClick={() => this.check(0)} wrongColor={this.state.wrongGuesses[0]}/>
+            <ColorOption color={this.state.colors[1]} onClick={() => this.check(1)} wrongColor={this.state.wrongGuesses[1]}/>
+            <ColorOption color={this.state.colors[2]} onClick={() => this.check(2)} wrongColor={this.state.wrongGuesses[2]}/>
+            <ColorOption color={this.state.colors[3]} onClick={() => this.check(3)} wrongColor={this.state.wrongGuesses[3]}/>
+            <ColorOption color={this.state.colors[4]} onClick={() => this.check(4)} wrongColor={this.state.wrongGuesses[4]}/>
+            <ColorOption color={this.state.colors[5]} onClick={() => this.check(5)} wrongColor={this.state.wrongGuesses[5]}/>
           </ColorOptions>
         </ColorsContainer>
 
@@ -72,10 +81,13 @@ const AppBody = styled(Flex)`
   height: 100vh;
 `
 const Row = styled(Flex)`
-  padding: 20px 200px;
+  padding: 20px 400px;
 `
 const HeaderContainer = styled(Row)`
   background-color: #3C76AE;
+  ${props => props.gameWon && `
+    background-color: rgb(${props.colour.r}, ${props.colour.g}, ${props.colour.b});
+  `}
   justify-content: center;
   flex-direction: column;
   color: white;
@@ -102,13 +114,18 @@ const ColorOptions = styled(Flex)`
   justify-content: space-between;
   flex-wrap: wrap;
   flex-direction: row;
+  width: 100%;
 `
 const ColorOption = styled(Flex)`
   height: 50px;
-  width: 120px;
+  width: calc(100% / 3);
 
   ${props => props.color && `
     background-color: rgb(${props.color.r}, ${props.color.g}, ${props.color.b});
+  `}
+
+  ${props => props.wrongColor && `
+    visibility: hidden;
   `}
 `
 const MenuButton = styled.button`
