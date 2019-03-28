@@ -2,31 +2,42 @@ import React, { Component } from 'react';
 import './App.css';
 import styled from 'styled-components';
 
+// TODO:
+// + highlight button mode with color (selected)
+// + cursor pointer (hand) on buttons
+// + have a method to create a new color
+// + function to generate an array with N colors
+// + wrongGuesses same number of items as colors
+// style the color blocks
 class App extends Component {
   constructor(props) {
     super(props);
 
-    const colors = [
-      {r: this.randomColorValue(), g: this.randomColorValue(), b: this.randomColorValue()},
-      {r: this.randomColorValue(), g: this.randomColorValue(), b: this.randomColorValue()},
-      {r: this.randomColorValue(), g: this.randomColorValue(), b: this.randomColorValue()},
-      {r: this.randomColorValue(), g: this.randomColorValue(), b: this.randomColorValue()},
-      {r: this.randomColorValue(), g: this.randomColorValue(), b: this.randomColorValue()},
-      {r: this.randomColorValue(), g: this.randomColorValue(), b: this.randomColorValue()},
-    ]
-
     this.state = {
       mode: "hard",
-      colorToGuess: colors[0],
-      colors: colors.sort(() =>  .5 - Math.random()),
+      colorToGuess: {r: 0, g: 0, b: 0},
+      colors: [],
       gameWon: false,
-      wrongGuesses: [false, false, false, false, false, false]
+      wrongGuesses: [],
     }
+  }
+
+  componentDidMount() {
+    this.newGame(this.state.mode);
   }
 
   randomColorValue() {
     return Math.floor(Math.random() * (255 + 1));
   }
+
+  newColor() {
+    return {r: this.randomColorValue(), g: this.randomColorValue(), b: this.randomColorValue()};
+  }
+
+ arrayOfColors(n) {
+   var arr = [...Array(n).keys()];
+   return arr.map(x => x = this.newColor());
+ }
 
   check(n) {
     if (this.state.colors[n] === this.state.colorToGuess) {
@@ -39,6 +50,33 @@ class App extends Component {
     }
   }
 
+  newGame(mode) {
+    let colors = []
+
+    if (mode === "hard") {
+      colors = this.arrayOfColors(6);
+    }
+    else {
+      colors = this.arrayOfColors(3);
+    }
+
+    this.setState({
+      colorToGuess: colors[0],
+      colors: colors.sort(() =>  .5 - Math.random()),
+      gameWon: false,
+      wrongGuesses: colors.map(x => false),
+      mode: mode
+    });
+  }
+
+  easy() {
+    this.newGame("easy");
+  }
+
+  hard() {
+    this.newGame("hard");
+  }
+
   render() {
     return (
       <AppBody>
@@ -49,10 +87,10 @@ class App extends Component {
         </HeaderContainer>
 
         <MenuContainer>
-          <MenuButton onClick={() => window.location.reload()}>NEW COLORS</MenuButton>
+          <NewGameButton onClick={() => this.newGame(this.state.mode)}>NEW COLORS</NewGameButton>
           <ModeButtons>
-            <MenuButton>EASY</MenuButton>
-            <MenuButton>HARD</MenuButton>
+            <Button onClick={() => this.easy()} selected={this.state.mode === "easy"}>EASY</Button>
+            <Button onClick={() => this.hard()} selected={this.state.mode === "hard"}>HARD</Button>
           </ModeButtons>
         </MenuContainer>
 
@@ -62,11 +100,14 @@ class App extends Component {
             <ColorOption color={this.state.colors[1]} onClick={() => this.check(1)} wrongColor={this.state.wrongGuesses[1]}/>
             <ColorOption color={this.state.colors[2]} onClick={() => this.check(2)} wrongColor={this.state.wrongGuesses[2]}/>
           </ColorOptions>
-          <ColorOptions>
-            <ColorOption color={this.state.colors[3]} onClick={() => this.check(3)} wrongColor={this.state.wrongGuesses[3]}/>
-            <ColorOption color={this.state.colors[4]} onClick={() => this.check(4)} wrongColor={this.state.wrongGuesses[4]}/>
-            <ColorOption color={this.state.colors[5]} onClick={() => this.check(5)} wrongColor={this.state.wrongGuesses[5]}/>
-          </ColorOptions>
+
+          {this.state.mode === 'hard' && (
+            <ColorOptions>
+              <ColorOption color={this.state.colors[3]} onClick={() => this.check(3)} wrongColor={this.state.wrongGuesses[3]}/>
+              <ColorOption color={this.state.colors[4]} onClick={() => this.check(4)} wrongColor={this.state.wrongGuesses[4]}/>
+              <ColorOption color={this.state.colors[5]} onClick={() => this.check(5)} wrongColor={this.state.wrongGuesses[5]}/>
+            </ColorOptions>
+          )}
         </ColorsContainer>
 
       </AppBody>
@@ -130,6 +171,8 @@ const ColorOption = styled(Flex)`
   flex-direction: column;
   margin: 10px;
   border-radius: 25px;
+  cursor: pointer;
+  border: 5px solid whitesmoke;
 
   ${props => props.color && `
     background-color: rgb(${props.color.r}, ${props.color.g}, ${props.color.b});
@@ -139,19 +182,35 @@ const ColorOption = styled(Flex)`
     visibility: hidden;
   `}
 `
-const MenuButton = styled.button`
+const NewGameButton = styled.button`
   color: #3C76AE;
   background-color: white;
   font-weight: bold;
   border: none;
   outline: none;
+  cursor: pointer;
   &:hover {
     color: white;
     background-color: #3C76AE;
   }
 `
+const Button = styled.button`
+  color: #3C76AE;
+  background-color: white;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  &:hover {
+    color: white;
+    background-color: #3C76AE;
+  }
+  ${props => props.selected && `
+    color: white;
+    background-color: #3C76AE;
+  `}
+`
 const ModeButtons = styled(Flex)`
   align-items: stretch;
 `
-
 export default App;
