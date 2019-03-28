@@ -61,6 +61,8 @@ class App extends Component {
             <ColorOption color={this.state.colors[0]} onClick={() => this.check(0)} wrongColor={this.state.wrongGuesses[0]}/>
             <ColorOption color={this.state.colors[1]} onClick={() => this.check(1)} wrongColor={this.state.wrongGuesses[1]}/>
             <ColorOption color={this.state.colors[2]} onClick={() => this.check(2)} wrongColor={this.state.wrongGuesses[2]}/>
+          </ColorOptions>
+          <ColorOptions>
             <ColorOption color={this.state.colors[3]} onClick={() => this.check(3)} wrongColor={this.state.wrongGuesses[3]}/>
             <ColorOption color={this.state.colors[4]} onClick={() => this.check(4)} wrongColor={this.state.wrongGuesses[4]}/>
             <ColorOption color={this.state.colors[5]} onClick={() => this.check(5)} wrongColor={this.state.wrongGuesses[5]}/>
@@ -81,7 +83,7 @@ const AppBody = styled(Flex)`
   height: 100vh;
 `
 const Row = styled(Flex)`
-  padding: 20px 400px;
+  padding: 2% 33%;
 `
 const HeaderContainer = styled(Row)`
   background-color: #3C76AE;
@@ -91,11 +93,11 @@ const HeaderContainer = styled(Row)`
   justify-content: center;
   flex-direction: column;
   color: white;
-  font-size: 22px;
+  font-size: 26px;
   border: none;
 `
 const ColorCode = styled(Flex)`
-  font-size: 40px;
+  font-size: 44px;
   justify-content: center;
 `
 const MenuContainer = styled(Row)`
@@ -109,16 +111,25 @@ const MenuContainer = styled(Row)`
 const ColorsContainer = styled(Row)`
   background-color: #445b70;
   flex: 1;
+  flex-direction: column;
+  padding: 0;
+  align-items: center;
+  padding-top: 15px;
 `
 const ColorOptions = styled(Flex)`
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
   flex-direction: row;
-  width: 100%;
+  width: 50%;
+  min-width: 600px;
 `
 const ColorOption = styled(Flex)`
-  height: 50px;
-  width: calc(100% / 3);
+  height: 160px;
+  width: 160px;
+  margin: 5px;
+  flex-direction: column;
+  margin: 10px;
+  border-radius: 25px;
 
   ${props => props.color && `
     background-color: rgb(${props.color.r}, ${props.color.g}, ${props.color.b});
@@ -133,6 +144,7 @@ const MenuButton = styled.button`
   background-color: white;
   font-weight: bold;
   border: none;
+  outline: none;
   &:hover {
     color: white;
     background-color: #3C76AE;
