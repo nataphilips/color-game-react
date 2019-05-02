@@ -7,7 +7,9 @@ You'll see a combination of three numbers on the screen. The task is to guess wh
 
 ### `code to show`
 
-- React basic syntax
-- Styled components basic syntax
+* React basic syntax
+* Styled components basic syntax
+
+![ColorGameScreenshot](https://i.ibb.co/dB9SQSt/Color-Game.png)
 
 You can play if you click the [Link](https://colour-game-react.herokuapp.com/).
