@@ -9,7 +9,8 @@ You'll see a combination of three numbers on the screen. The task is to guess wh
 
 * React basic syntax
 * Styled components basic syntax
+* Flexbox
 
-![ColorGameScreenshot](https://i.ibb.co/dB9SQSt/Color-Game.png)
+![ColorGameScreenshot](https://pasteboard.co/IcSts3h.png)
 
 You can play if you click the [Link](https://colour-game-react.herokuapp.com/).
